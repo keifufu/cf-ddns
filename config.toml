@@ -1,0 +1,4 @@
+API_KEY = ""
+ZONE_ID = ""
+# Example: ["www.keifufu.dev", "keifufu.dev"]
+RECORDS = [""]
