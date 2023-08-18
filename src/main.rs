@@ -1,9 +1,31 @@
+use std::{
+  env::current_exe,
+  fs::{create_dir, File},
+  io::Write,
+};
+
 use config::Config;
 use serde_json::Value;
 
+const DEFAULT_CONFIG: &str = include_str!("data/config.toml");
+
 fn main() {
+  let exe_path = current_exe().unwrap();
+  let current_dir = exe_path.parent().unwrap();
+  let config_dir = current_dir.join("config");
+  let config_path = config_dir.join("config.toml");
+
+  if !config_dir.exists() {
+    create_dir(&config_dir).unwrap();
+  }
+
+  if !config_path.exists() {
+    let mut file = File::create(&config_path).unwrap();
+    file.write_all(DEFAULT_CONFIG.as_bytes()).unwrap();
+  }
+
   let config = Config::builder()
-    .add_source(config::File::with_name("config.toml"))
+    .add_source(config::File::from(config_path))
     .build()
     .unwrap();
 
